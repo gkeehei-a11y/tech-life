@@ -2,39 +2,36 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <title>KaliDocs AR | موسوعة كالي لينكس</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; padding: 50px; display: flex; flex-direction: column; align-items: center; }
-        .chat-box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 80%; max-width: 600px; }
-        textarea { width: 100%; height: 120px; border: 2px solid #ddd; border-radius: 10px; padding: 10px; margin-bottom: 15px; box-sizing: border-box; }
-        button { background-color: #28a745; color: white; border: none; padding: 15px 30px; border-radius: 10px; cursor: pointer; font-size: 16px; }
-        #chatHistory { margin-top: 20px; width: 100%; text-align: right; }
-        .msg { background: #e9ecef; padding: 10px; margin: 10px 0; border-radius: 8px; }
+        :root { --bg: #0d1117; --text: #c9d1d9; --accent: #238636; --code-bg: #161b22; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', Courier, monospace; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        h1 { color: #58a6ff; text-align: center; }
+        #searchBar { width: 100%; padding: 15px; border-radius: 8px; border: 1px solid var(--accent); background: var(--code-bg); color: white; font-size: 18px; margin-bottom: 20px; }
+        .card { background: var(--code-bg); padding: 15px; margin: 10px 0; border-left: 5px solid var(--accent); border-radius: 4px; }
+        .command { color: #f85149; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="chat-box">
-        <h2>🌐 البوابة التقنية الذكية</h2>
-        <textarea id="userInput" placeholder="اسألني أي سؤال تقني..."></textarea>
-        <button onclick="askAI()">إرسال الاستفسار</button>
-        <div id="chatHistory"></div>
+    <div class="container">
+        <h1>KaliDocs AR - دليل المحترفين</h1>
+        <input type="text" id="searchBar" placeholder="ابحث عن أمر (مثال: nmap -sS)..." onkeyup="filterCommands()">
+        <div id="results">
+            <div class="card">
+                <h3>فحص الـ SYN المتخفي</h3>
+                <p>يستخدم لعدم إكمال المصافحة الثلاثية لتجنب السجلات.</p>
+                <code class="command">nmap -sS [Target]</code>
+            </div>
+            </div>
     </div>
 
     <script>
-        async function askAI() {
-            const userInput = document.getElementById('userInput').value;
-            const chatHistory = document.getElementById('chatHistory');
-            chatHistory.innerHTML = '<p>جاري التفكير...</p>' + chatHistory.innerHTML;
-            
-            try {
-                const res = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: userInput })
-                });
-                const data = await res.json();
-                chatHistory.innerHTML = `<div class="msg"><strong>أنت:</strong> ${userInput}<br><strong>المنتدى:</strong> ${data.reply || data.error}</div>` + chatHistory.innerHTML;
-            } catch (error) {
-                chatHistory.innerHTML = '<div class="msg" style="color:red">خطأ في الاتصال بالسيرفر! تأكد من إعدادات الـ API Key في Render</div>' + chatHistory.innerHTML;
+        function filterCommands() {
+            let input = document.getElementById('searchBar').value.toLowerCase();
+            let cards = document.getElementsByClassName('card');
+            for (let i = 0; i < cards.length; i++) {
+                cards[i].style.display = cards[i].innerText.toLowerCase().includes(input) ? "" : "none";
             }
         }
     </script>
