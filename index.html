@@ -7,24 +7,37 @@
         body { font-family: sans-serif; padding: 20px; text-align: center; }
         textarea { width: 80%; height: 100px; margin-bottom: 10px; }
         button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        #chatHistory { text-align: right; margin-top: 20px; border-top: 1px solid #ccc; padding: 10px; }
     </style>
 </head>
 <body>
     <h1>مرحباً بك في بوابتك التقنية</h1>
     <textarea id="userInput" placeholder="اسألني أي سؤال..."></textarea><br>
-    <button onclick="askAI()">إرسال إلى الذكاء الاصطناعي</button>
-    <p id="response"></p>
+    <button onclick="askAI()">إرسال</button>
+    <div id="chatHistory"></div>
 
     <script>
         async function askAI() {
-            const message = document.getElementById('userInput').value;
-            const res = await fetch('/api/chat', { // هذا الرابط سيعمل تلقائياً عند ربط السيرفر
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message })
-            });
-            const data = await res.json();
-            document.getElementById('response').innerText = data.reply;
+            const userInput = document.getElementById('userInput').value;
+            const chatHistory = document.getElementById('chatHistory');
+            
+            try {
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userInput })
+                });
+                const data = await res.json();
+                
+                if (data.reply) {
+                    chatHistory.innerHTML += `<p><strong>أنت:</strong> ${userInput}</p>`;
+                    chatHistory.innerHTML += `<p><strong>المنتدى:</strong> ${data.reply}</p>`;
+                } else {
+                    chatHistory.innerHTML += `<p>خطأ: ${data.error || "لا يوجد رد"}</p>`;
+                }
+            } catch (error) {
+                chatHistory.innerHTML += `<p>خطأ في الاتصال بالسيرفر</p>`;
+            }
         }
     </script>
 </body>
