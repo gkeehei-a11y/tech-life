@@ -1,3 +1,5 @@
+const path = require('path');
+app.use(express.static(__dirname));
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
