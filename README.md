@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منتدى بوابة الحياة التقنية الشامل</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
+            --text-color: #f8fafc;
+            --yellow-color: #facc15;
+            --chat-user: #0284c7;
+            --chat-ai: #334155;
+            --tag-cyber: #ef4444;
+            --tag-code: #10b981;
+            --tag-general: #8b5cf6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 50px 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        .highlight {
+            color: var(--yellow-color);
+            text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 2.2fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 950px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .main-content, .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .section-title {
+            color: var(--accent-color);
+            font-size: 1.6rem;
+            margin: 0 0 15px 0;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .forum-card {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            padding: 25px;
+            border: 1px solid #334155;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .post-form input, .post-form textarea, .post-form select {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background-color: #0f172a;
+            color: white;
+            box-sizing: border-box;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .post-form textarea {
+            resize: vertical;
+            height: 120px;
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: #0f172a;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #7dd3fc;
+            transform: translateY(-2px);
+        }
+
+        .post {
+            background-color: #111827;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border: 1px solid #1e293b;
+            transition: transform 0.2s;
+        }
+
+        .post:hover {
+            transform: scale(1.01);
+            border-color: #475569;
+        }
+
+        .post-meta {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .badge.cyber { background-color: var(--tag-cyber); }
+        .badge.code { background-color: var(--tag-code); }
+        .badge.general { background-color: var(--tag-general); }
+
+        .post h3 {
+            margin: 5px 0 10px 0;
+            color: #f8fafc;
+        }
+
+        .post p {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin: 0;
+            font-size: 0.98rem;
+        }
+
+        .ai-container {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            border: 1px solid var(--accent-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            position: sticky;
+            top: 20px;
+        }
+
+        .chat-box {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-bottom: 1px solid #334155;
+            margin-bottom: 15px;
+        }
+
+        .msg {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .msg.user {
+            background-color: var(--chat-user);
+            align-self: flex-start;
+            border-bottom-right-radius: 2px;
+        }
+
+        .msg.ai {
+            background-color: var(--chat-ai);
+            align-self: flex-end;
+            border-bottom-left-radius: 2px;
+            border-left: 4px solid var(--yellow-color);
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input-area input {
+            flex-grow: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background-color: #0f172a;
+            color: white;
+            outline: none;
+        }
+
+        .stats-card {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            padding: 20px;
+            border: 1px solid #334155;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background-color: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #1e293b;
+        }
+
+        .stat-item div:first-child {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--yellow-color);
+        }
+
+        .stat-item div:last-child {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+            margin-top: 60px;
+            border-top: 1px solid #1e293b;
+            background-color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>منتدى <span class="highlight">الحياة التقنية</span> الضخم والشامل</h1>
+        <p>الملتقى الأكبر لمهندسي الأمن السيبراني، المطورين، وعشاق التكنولوجيا والذكاء الاصطناعي</p>
+    </header>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <section class="forum-card post-form">
+                <h2 class="section-title">✍️ إنشاء موضوع جديد بالمنتدى</h2>
+                <input type="text" id="postTitle" placeholder="اكتب عنوان الموضوع المطور هنا...">
+                <select id="postCategory">
+                    <option value="cyber">🛡️ قسم الأمن السيبراني واختبار الاختراق</option>
+                    <option value="code">💻 قسم تطوير البرمجيات ولغات البرمجة</option>
+                    <option value="general">⚙️ قسم الأخبار والتقنيات العامة</option>
+                </select>
+                <textarea id="postContent" placeholder="اكتب محتوى وتقاصيل موضوعك بالتفصيل..."></textarea>
+                <button class="btn" onclick="addPost()">نشر في المنتدى</button>
+            </section>
+
+            <section class="forum-card">
+                <h2 class="section-title">📌 المواضيع المثبتة والمناقشات الحية</h2>
+                <div id="postsContainer">
+                    
+                    <div class="post">
+                        <div class="post-meta">
+                            <span class="badge cyber">أمن سيبراني</span>
+                            <span>نشر بواسطة: خبير_الأنظمة | منذ ساعة</span>
+                        </div>
+                        <h3>ثغرات Zero-Day وكيفية التعامل معها في بيئات العمل؟</h3>
+                        <p>تعتبر ثغرات يوم الصفر من أخطر التهديدات التي تواجه المنشآت اليوم، نظراً لعدم وجود ترقيع أمني جاهز لها من الشركة المصنعة. الحل دائماً يكمن في تطبيق سياسات الدفاع العميق (Defense in Depth) ومراقبة سجلات النظام بدقة لرصد أي سلوك غريب فوراً.</p>
+                    </div>
+
+                    <div class="post">
+                        <div class="post-meta">
+                            <span class="badge code">برمجة</span>
+                            <span>نشر بواسطة: هندسة_الكود | منذ ساعتين</span>
+                        </div>
+                        <h3>مقارنة شاملة: استخدام العمارة البرمجية Microservices مقابل Monolith</h3>
+                        <p>عند بناء التطبيقات الضخمة، يتجه الكثيرون إلى المايكروسيرفيسز لتسهيل التوسع وتقسيم العمل بين الفرق. لكن يجب الحذر! فالتطبيقات الصغيرة أو البدايات تكون فيها معمارية الـ Monolith أسرع في التطوير وأقل تعقيداً في الإدارة والربط الشبكي.</p>
+                    </div>
+
+                    <div class="post">
+                        <div class="post-meta">
+                            <span class="badge general">تقنية عامة</span>
+                            <span>نشر بواسطة: وعي_رقمي | منذ 5 ساعات</span>
+                        </div>
+                        <h3>أين ستصل الحواسب الكمومية (Quantum Computing) في السنوات القادمة؟</h3>
+                        <p>تتطور الحواسب الكمومية بسرعة مذهلة، ومن المتوقع أن تحدث ثورة في مجالات التشفير، ومحاكاة الجزيئات الكيميائية، وتطوير الأدوية. التحدي الحالي يكمن في استقرار الكيوبتس (Qubits) والتحكم في درجات الحرارة القريبة من الصفر المطلق.</p>
+                    </div>
+
+                    <div class="post">
+                        <div class="post-meta">
+                            <span class="badge cyber">أمن سيبراني</span>
+                            <span>نشر بواسطة: صائد_الثغرات | منذ يوم</span>
+                        </div>
+                        <h3>دليل عملي لفحص تطبيقات الويب باستخدام OWASP Top 10</h3>
+                        <p>لكل مبرمج ومختبر اختراق، يجب الاعتماد على معيار OWASP السنوي كمرجع أساسي. في هذا الدليل نستعرض ثغرات حقن البيانات (Injection)، والمصادقة المكسورة، وكيفية حماية قواعد البيانات من الاستعلامات الخبيثة وتأمين ملفات الـ Configuration.</p>
+                    </div>
+
+                    <div class="post">
+                        <div class="post-meta">
+                            <span class="badge code">برمجة</span>
+                            <span>نشر بواسطة: بايثوني_قديم | منذ يومين</span>
+                        </div>
+                        <h3>أفضل الممارسات لأتمتة سير العمل باستخدام سكربتات Python</h3>
+                        <p>لغة بايثون هي الملكة عندما يتعلق الأمر بالأتمتة. باستخدام مكتبات مثل `os` و `requests` و `paramiko` يمكنك كتابة سكربت متكامل يقوم بالاتصال بسيرفرات متعددة، وسحب النسخ الاحتياطية وتشفيرها، ثم رفعها على السحابة وإرسال تقرير فوري على تليجرام.</p>
+                    </div>
+
+                    <div class="post">
+                        <div class="post-meta">
+                            <span class="badge general">تقنية عامة</span>
+                            <span>نشر بواسطة: فني_شبكات | منذ 3 أيام</span>
+                        </div>
+                        <h3>شرح مبسط لتقنية الـ Subnetting لتنظيم الشبكات الداخلية</h3>
+                        <p>تقسيم الشبكات أو السبنّت يساهم في تقليل الازدحام (Broadcast Storms) ورفع مستوى الأمان داخل الشركة عن طريق عزل أقسام الموظفين عن أقسام السيرفرات الحساسة، باستخدام الـ Subnet Mask المناسب لحجم الأجهزة المتوفرة.</p>
+                    </div>
+
+                    <div class="post">
+                        <div class="post-meta">
+                            <span class="badge cyber">أمن سيبراني</span>
+                            <span>نشر بواسطة: مستشار_أمني | منذ 4 أيام</span>
+                        </div>
+                        <h3>الهندسة الاجتماعية: الرابط الأضعف في منظومة الأمن السيبراني</h3>
+                        <p>يمكنك شراء أفضل جدران الحماية وأنظمة الـ EDR، لكن هجمة تصيد واحدة (Phishing) تستهدف موظفاً غير مدرب قد تنهار بسببها الشبكة بالكامل. الاستثمار الحقيقي يبدأ من توعية العنصر البشري وتطبيق مبدأ التحقق المستمر والصارم العالي.</p>
+                    </div>
+
+                    <div class="post">
+                        <div class="post-meta">
+                            <span class="badge code">برمجة</span>
+                            <span>نشر بواسطة: ويب_ماستر | منذ 5 أيام</span>
+                        </div>
+                        <h3>مستقبل تطوير الواجهات الأمامية مع Next.js و React Server Components</h3>
+                        <p>تغيير كبير يحدث الآن في عالم الويب مع الانتقال الكامل للمعالجة من طرف السيرفر (Server-Side Rendering). هذا التحديث يقلل من حجم ملفات الجافاسكربت المرسلة للمتصفح، مما يعطي سرعة خارقة في التصفح وتحسين محركات البحث SEO.</p>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <aside class="sidebar">
+            
+            <section class="ai-container">
+                <h2 class="section-title">🤖 مساعد ChatGPT التفاعلي</h2>
+                <div class="chat-box" id="chatBox">
+                    <div class="msg ai">مرحباً بك في بوابة الذكاء الاصطناعي الضخمة! أنا هنا لمساعدتك في توليد الأكواد النظيفة بالإنجليزية، وشرح خوارزميات الأمن السيبراني، ومساعدتك في حل المشاكل التقنية المعقدة. اسألني عن أي شيء!</div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="اسأل الذكاء الاصطناعي المطور..." onkeypress="handleKeyPress(event)">
+                    <button class="btn" onclick="sendMessage()">إرسال</button>
+                </div>
+            </section>
+
+            <section class="stats-card">
+                <h2 class="section-title">📊 إحصائيات المنتدى الحية</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div id="statMembers">1,420</div>
+                        <div>عضو مسجل</div>
+                    </div>
+                    <div class="stat-item">
+                        <div id="statPosts">8,941</div>
+                        <div>موضوع ومشاركة</div>
+                    </div>
+                    <div class="stat-item">
+                        <div style="color: #4ade80;">94</div>
+                        <div>متصل الآن</div>
+                    </div>
+                    <div class="stat-item">
+                        <div style="color: var(--accent-color);">100%</div>
+                        <div>حماية مشفرة</div>
+                    </div>
+                </div>
+            </section>
+
+        </aside>
+
+    </div>
+
+    <footer>
+        <p>&copy; جميع الحقوق محفوظة - منصة الحياة التقنية الشاملة والمطورة</p>
+    </footer>
+
+    <script>
+        let postsCount = 8941;
+
+        function addPost() {
+            const titleInput = document.getElementById('postTitle');
+            const categorySelect = document.getElementById('postCategory');
+            const contentInput = document.getElementById('postContent');
+            const container = document.getElementById('postsContainer');
+
+            if (titleInput.value.trim() === '' || contentInput.value.trim() === '') {
+                alert('الرجاء كتابة عنوان ومحتوى الموضوع أولاً!');
+                return;
+            }
+
+            let catLabel = '';
+            let catClass = '';
+            if(categorySelect.value === 'cyber') { catLabel = 'أمن سيبراني'; catClass = 'cyber'; }
+            else if(categorySelect.value === 'code') { catLabel = 'برمجة'; catClass = 'code'; }
+            else { catLabel = 'تقنية عامة'; catClass = 'general'; }
+
+            const newPost = document.createElement('div');
+            newPost.className = 'post';
+            newPost.innerHTML = `
+                <div class="post-meta">
+                    <span class="badge ${catClass}">${catLabel}</span>
+                    <span>نشر بواسطة: عضو_جديد | الآن</span>
+                </div>
+                <h3>${escapeHTML(titleInput.value)}</h3>
+                <p>${escapeHTML(contentInput.value)}</p>
+            `;
+
+            container.insertBefore(newPost, container.firstChild);
+            
+            postsCount++;
+            document.getElementById('statPosts').textContent = postsCount.toLocaleString();
+
+            titleInput.value = '';
+            contentInput.value = '';
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const chatBox = document.getElementById('chatBox');
+            const userText = input.value.trim();
+
+            if (userText === '') return;
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg user';
+            userMsg.textContent = userText;
+            chatBox.appendChild(userMsg);
+            
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'msg ai';
+                aiMsg.innerHTML = getAIResponse(userText);
+                chatBox.appendChild(aiMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 650);
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function getAIResponse(query) {
+            const q = query.toLowerCase();
+            
+            if (q.includes('هكر') || q.includes('اختراق') || q.includes('hack') || q.includes('أمن')) {
+                return `Here is your requested security blueprint:<br><br>1. Penetration testing strategy mapping.<br>2. Active firewall rule optimization.<br>3. Security operations logging mechanism.<br>4. Cryptographic algorithm validation.`;
+            } else if (q.includes('كود') || q.includes('برمجة') || q.includes('code') || q.includes('برمج')) {
+                return `Clean logical code block generated successfully:<br><pre style="background:#050b14; padding:12px; color:#4ade80; direction:ltr; text-align:left; border-radius:6px; overflow-x:auto;">function runDeploymentPipeline() {\n    const activeNode = true;\n    if (activeNode) {\n        console.log("Cluster initialization successful.");\n        return 200;\n    }\n    return 500;\n}</pre>`;
+            } else if (q.includes('مشكلة') || q.includes('بطء') || q.includes('fix') || q.includes('عطل')) {
+                return `Diagnostic optimization steps:<br><br>1. Execute kernel state inspection routines.<br>2. Analyze active system process allocation tables.<br>3. Clear unreferenced memory leak references.<br>4. Re-index corrupted metadata segments.`;
+            } else {
+                return `System query processed correctly.<br><br>Response code: 200 SUCCESS.<br>AI Core Engine active. Ask me about system configurations, security audits, or backend code optimization scripts.`;
+            }
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+    </script>
+</body>
+</html>
